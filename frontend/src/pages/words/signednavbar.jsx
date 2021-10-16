@@ -246,18 +246,11 @@ const MobileNavItem = ({ label, children, href }) => {
 
 const NAV_ITEMS = [
     {
-        label: 'Decks',
-        children: [
-            {
-                label: 'View Decks',
-                subLabel: 'Look at the latest decks that people have created for your learning',
-                href: ROUTES.view,
-            },
-            {
-                label: 'Create Decks',
-                subLabel: 'Help contribute to the decks and help eveyones learning as a community',
-                href: ROUTES.add,
-            },
-        ],
+        label: 'Browse Decks',
+        href: ROUTES.view
     },
+    {
+        label: 'Create a Deck',
+        href: ROUTES.add
+    }
 ];

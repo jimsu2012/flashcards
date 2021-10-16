@@ -16,30 +16,44 @@ import {
     useBreakpointValue,
     IconProps,
     Icon,
+    InputGroup,
+    InputLeftElement,
+    InputRightElement
 } from '@chakra-ui/react';
 import { useHistory } from 'react-router-dom'
 import ROUTES from '../../router/router'
-
+import { 
+    MailIcon,
+    LockClosedIcon
+} from '@heroicons/react/outline'
+import { EmailIcon, LockIcon } from '@chakra-ui/icons'
+import * as Yup from 'yup'
 
 
 export default function SignIn() {
 
+    const SignupSchema = Yup.object().shape({
+        email: Yup.string().email('Must be an email').required('Email is required'),
+        password: Yup.string().min(10, 'Too Short!').max(50, 'Too Long!')
+    })
+
     const history = useHistory()
 
-    const [user, setUser] = React.useState('')
-    const [password, setPassword] = React.useState('')
-    const [ruser, rsetUser] = React.useState('')
-    const [rpassword, rsetPassword] = React.useState('')
+    const [show, setShow] = React.useState(false)
+
+    const handleChangePass = () => {
+        setShow(!show)
+    }
 
     const firebase = {
         submit: values => {
-            setUser(values.username)
-            setPassword(values.password)
-            history.replace(ROUTES.view)
+            alert(`Email is ${values.username} and password is ${values.password}`)
         }
     }
 
     return (
+        <>
+        <WithSubnavigation />
         <Box position={'relative'}>
             <Container
                 as={SimpleGrid}
@@ -140,20 +154,102 @@ export default function SignIn() {
                     </Stack>
                     <Box as={'form'} mt={10}>
                         <Stack spacing={4}>
-                           <FormIkForm firebase={firebase} />
+                            <Formik
+                                initialValues={{
+                                    password: '',
+                                    username: ''
+                                }}
+
+                    
+                                onSubmit={(values, actions) => {
+                                    firebase.submit(values)
+                                    actions.setSubmitting(false)
+                                }}
+                            >
+                                {props => (
+                                    <Container paddingTop={"15"} >
+                                        <Form onSubmit={props.handleSubmit} >
+                                            <Container padding="2" >
+                                                <Text mb="8px" fontWeight={"semibold"}>Email: </Text>
+
+                                                <InputGroup>
+                                                    <InputLeftElement 
+                                                        pointerEvents="none"
+                                                        children={<EmailIcon color="gray.600" />}
+                                                    />
+                                                    <Input
+                                                        name="username"
+                                                        id="username"
+                                                        value={props.values.username}
+                                                        onChange={props.handleChange}
+                                                        placeholder="Enter your username here..."
+                                                        size="md"
+                                                        onBlur={props.handleBlur}
+                                                    />
+                                                </InputGroup>
+                                                </Container>
+                                            <Container padding="2">
+                                                <Text mb="8px" fontWeight={"semibold"} >Password: </Text>
+                                                <InputGroup>
+                                                    <InputLeftElement
+                                                        pointerEvents="none"
+                                                        children={<LockIcon color="gray.600" />}
+                                                    />
+                                                    <Input
+                                                        name="password"
+                                                        id="password"
+                                                        value={props.values.password}
+                                                        onChange={props.handleChange}
+                                                        onBlur={props.handleBlur}
+                                                        placeholder="Enter your password here..."
+                                                        size="md"
+                                                        type={show ? "text" : "password"}
+                                
+                                                    />
+                                                    <InputRightElement>
+                                                        <Button mr={7} paddingX={6}  h="2rem" size="sm" onClick={handleChangePass}>
+                                                            {show ? "Hide" : "Show"}
+                                                        </Button>
+                                                    </InputRightElement>
+
+                                                </InputGroup>
+
+
+                                                </Container>
+                                            <Container padding="2" >
+                                                <Button
+                                                    onClick={props.handleSubmit}
+                                                    fontFamily={'heading'}
+                                                    mt={8}
+                                                    w={'full'}
+                                                    bgGradient="linear(to-r, green.400,blue.400)"
+                                                    color={'white'}
+                                                    _hover={{
+                                                        bgGradient: 'linear(to-r, green.400,blue.400)',
+                                                        boxShadow: 'xl',
+                                                    }}>
+                                                    Submit
+                                                </Button>
+                                                <Button
+                                                    onClick={() => history.replace(ROUTES.view)}
+                                                    fontFamily={'heading'}
+                                                    mt={8}
+                                                    w={'full'}
+                                                    bgGradient="linear(to-r, green.400,blue.400)"
+                                                    color={'white'}
+                                                    _hover={{
+                                                        bgGradient: 'linear(to-r, green.400,blue.400)',
+                                                        boxShadow: 'xl',
+                                                    }}>
+                                                    Next Page
+                                                </Button>
+                                            </Container>
+                                        </Form>
+                                    </Container>
+                                )}
+                            </Formik>
                         </Stack>
-                        <Button
-                            fontFamily={'heading'}
-                            mt={8}
-                            w={'full'}
-                            bgGradient="linear(to-r, green.400,blue.400)"
-                            color={'white'}
-                            _hover={{
-                                bgGradient: 'linear(to-r, green.400,blue.400)',
-                                boxShadow: 'xl',
-                            }}>
-                            Submit
-                        </Button>
+                        
                     </Box>
                     form
                 </Stack>
@@ -165,8 +261,7 @@ export default function SignIn() {
                 style={{ filter: 'blur(70px)' }}
             />
         </Box>
-
-
+        </>
     )
 }
 
@@ -323,6 +418,7 @@ const avatars = [
 export const Blur = props => {
     return (
         <Icon
+            marginTop={"4rem"}
             width={useBreakpointValue({ base: '100%', md: '40vw', lg: '30vw' })}
             zIndex={useBreakpointValue({ base: -1, md: -1, lg: 0 })}
             height="560px"
