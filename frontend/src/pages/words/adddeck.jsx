@@ -2,13 +2,21 @@ import React from 'react'
 import { Formik, Form } from 'formik'
 import { Text, Input, Container, Button } from '@chakra-ui/react'
 import WithSubnavigation from './signednavbar'
+import { addDeckAction} from '../../actions/AddDeckActions'
 
 function FormikExample() {
 
    
     const firebase = {
-        submit: values => {
-                  
+        submit: ({definition, term}) => {
+            addDeckAction({
+                deckId: "1",
+                term,
+                definition,
+                imageUrl: "",
+            }).then((value) => {
+                console.log(value);
+            })
         }
     }
 

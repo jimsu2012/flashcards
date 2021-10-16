@@ -1,0 +1,1 @@
+export const baseUrl = 'https://flashcards-mhacks-14.herokuapp.com'
