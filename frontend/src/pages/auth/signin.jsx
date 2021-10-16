@@ -139,7 +139,7 @@ export default function SignIn() {
                             color={'gray.800'}
                             lineHeight={1.1}
                             fontSize={{ base: '2xl', sm: '3xl', md: '4xl' }}>
-                            Join our community
+                            Request access to the application
                             <Text
                                 as={'span'}
                                 bgGradient="linear(to-r, green.400,blue.400)"
@@ -148,8 +148,8 @@ export default function SignIn() {
                             </Text>
                         </Heading>
                         <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
-                            We’re looking for amazing people like you. People who like to 
-                            empower their friends and everyone around them. 
+                            We are currently in private beta so we are currently restricting
+                            access to the application.
                         </Text>
                     </Stack>
                     <Box as={'form'} mt={10}>

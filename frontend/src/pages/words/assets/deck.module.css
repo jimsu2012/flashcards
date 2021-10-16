@@ -1,0 +1,31 @@
+.deck {
+    background-color: #004400; 
+    margin: 2rem;
+    border-radius: 10px;
+    color: white;
+    display: grid;
+    padding-right: 20px;
+    padding-left: 20px;
+    max-height: 100px;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 5px;
+    grid-template-rows: repeat(3, 1fr);
+    justify-content: center;
+}
+
+.title {
+    font-weight: bold;
+    grid-column: 1/7;
+    grid-row: 2;
+}
+
+.desc {
+    font-weight: semibold;
+    grid-column: 1/7;
+    grid-row: 2/3;
+}
+
+.stars {
+    grid-column: 8/10;
+    grid-row: 2;
+}

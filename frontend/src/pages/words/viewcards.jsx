@@ -2,49 +2,47 @@ import React from 'react'
 import WithSubnavigation from './signednavbar'
 import Card from './components/card'
 import Deck from './components/deck'
-import { Box, Text } from '@chakra-ui/react'
 import axios from "axios"
-
-const deck_url = "https://flashcards-mhacks-14.herokuapp.com/api/decks?format=json"
-
-export function getDataFromDeck() {
-    fetch(deck_url, {
-        method: 'GET',
-        credentials: 'same-origin'
-    })
-    .then(res => {
-        return res.json()
-    })
-    .catch(err => {
-       return  {
-            error: err
-        }
-    })
-}
+import styles from './assets/view.module.css'
 
 export default function Viewcards() {
 
+    const baseUrl = 'https://flashcards-mhacks-14.herokuapp.com'
+    const url = [baseUrl, 'api', 'decks'].join('/');
+    const [error, setError] = React.useState(null);
+    const [isLoaded, setIsLoaded] = React.useState(false);
+    const [decks, setDecks] = React.useState([]);
 
-     const data =  getDataFromDeck()
-     console.log(data)
-        
+    React.useEffect(() => {
+        fetch(url).then(res => res.json()).then(
+            result => {
+                setIsLoaded(true)
+                console.log(result)
+                setDecks(result)
+            },
+            error => {
+                setIsLoaded(true)
+                setError(true)
+            }
+        )
+    }, [url])
 
-    const Decks = [
-        { deckName: 'Revolutionary War', id: 0, stars: 1 },
-        
-        { deckName: 'Bones in the Body', id: 1, stars: 0 },
-        
-        { deckName: 'Biochemical Engineering', id: 2, stars: 4 }
-    ]
-
+    if (error) {
+        return <div>Error: {error}</div>
+    } else if (!isLoaded) {
+        return <div className={styles.loader} />
+    } else if (!decks) {
+        return <div>Deck not found</div>
+    }
     return (
         <>
             <WithSubnavigation />
-            <Box padding={"10rem"} flexDirection={"column"}>
-                {Decks.map((i, k) => {
-                    return <Deck name={i.deckName} routeId={i.id} stars={i.stars}  />
+            <div className={styles.wrapper} >
+                {decks.map((i, k) => {
+                    const { id, title, author_id, description, stars, flashcards } = i
+                    return <Deck id={id} title={title} author_id={author_id} description={description} stars={stars} flashcards={flashcards} />
                 })}
-            </Box>
+            </div>
         </>
     )
 }

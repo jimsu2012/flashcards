@@ -3,6 +3,7 @@ import { useParams, useLocation } from 'react-router'
 import WithSubnavigation from './signednavbar'
 import Card from './components/card'
 import { Heading } from '@chakra-ui/react'
+import StudyCard from './studycard'
 
 function useQuery() {
     return new URLSearchParams(useLocation().search)
@@ -47,6 +48,7 @@ export default function FindDeck() {
     return (
         <>
             <WithSubnavigation />
+            <StudyCard cards={Words[id]} />
             <Heading>{nameofDeck} with {stars} stars</Heading> 
             {Words[id].map((i, k) => {
                 return <Card term={i.term} meaning={i.word} stars={stars} />
