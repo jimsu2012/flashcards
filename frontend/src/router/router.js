@@ -4,7 +4,8 @@ const ROUTES = {
     home: '/',
     add: '/add',
     view: '/view',
-    findDeck: '/deck/:id'
+    findDeck: '/deck/:id',
+    findFlashcard: '/flashcard/:id'
 }
 
 export default ROUTES

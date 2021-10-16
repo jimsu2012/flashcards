@@ -1,20 +1,23 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { baseUrl } from '../constants/constants'
+import { baseUrl } from '../../../constants/constants'
+import FlashcardComponent from './Flashcard'
+import "../styles/Deck.css"
+import WithSubnavigation from '../signednavbar'
 
 export default function DeckComponent() {
     const { id } = useParams();
     const url = [baseUrl, 'api', 'decks', id].join('/');
-    console.log(url);
 
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
     const [deck, setDeck] = useState([]);
 
     useEffect(() => {
-        fetch(url).then(res => res.json).then(
+        fetch(url).then(res => res.json()).then(
             (result) => {
                 setIsLoaded(true);
+                console.log(result);
                 setDeck(result);
             },
             (error) => {
@@ -22,7 +25,7 @@ export default function DeckComponent() {
                 setError(error);
             }
         )
-    }, [])
+    }, [url]);
 
     if (error) {
         return <div>Error: {error}</div>
@@ -33,12 +36,19 @@ export default function DeckComponent() {
     }
     return (
         <div>
-            <h1>{deck.title}</h1>
-            <p>Author ID: {deck.author_id}</p>
-            <i>{deck.description}</i>
-            <b>Stars: {deck.stars}</b>
+            <WithSubnavigation/>
+            <div class="deck-info">
+                <b className="title">{deck.title}</b>
+                <p>Made by {deck.author_id}</p>
+                <i>{deck.description}</i>
+                <p>{deck.stars}★</p>
+            </div>
             <ul>
-                {deck.flashcards && deck.flashcards.map(id => <p>{id}</p>)}
+                <div className="deck-header-container">
+                    <p className="deck-header-term">Term</p>
+                    <p className="deck-header-definition">Definition</p>
+                </div>
+                {deck.flashcards && deck.flashcards.map(id => <FlashcardComponent id={id}/>)}
             </ul>
         </div>
     )
