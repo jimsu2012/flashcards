@@ -78,17 +78,9 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'djongo',
-        'NAME': 'Cluster0',
-        'ENFORCE_SCHEMA': False,
-        'CLIENT': {
-            'host': os.getenv('HOST'),
-        }      
-    }
-}
+import dj_database_url
+DATABASES = {}
+DATABASES['default'] = dj_database_url.config(default=os.getenv('HOST'))
 
 
 # Password validation
