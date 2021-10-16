@@ -1,1 +1,1 @@
-web: gunicorn backend/flashcards.wsgi
+web: gunicorn backend:flashcards
