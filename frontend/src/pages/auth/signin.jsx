@@ -40,6 +40,8 @@ export default function SignIn() {
     }
 
     return (
+        <>
+        <WithSubnavigation />
         <Box position={'relative'}>
             <Container
                 as={SimpleGrid}
@@ -165,7 +167,7 @@ export default function SignIn() {
                 style={{ filter: 'blur(70px)' }}
             />
         </Box>
-
+        </>
 
     )
 }
@@ -323,6 +325,7 @@ const avatars = [
 export const Blur = props => {
     return (
         <Icon
+            marginTop={"80px"}
             width={useBreakpointValue({ base: '100%', md: '40vw', lg: '30vw' })}
             zIndex={useBreakpointValue({ base: -1, md: -1, lg: 0 })}
             height="560px"
