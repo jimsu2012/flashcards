@@ -3,7 +3,7 @@ const ROUTES = {
     signin: '/signup',
     home: '/',
     add: '/add',
-    view: '/view',
+    view: '/discover',
     findDeck: '/deck/:id',
     findFlashcard: '/flashcard/:id'
 }

@@ -79,6 +79,7 @@ export default function WithSubnavigation() {
                         color={'white'}
                         bg={'pink.400'}
                         onClick={() => {
+                            localStorage.setItem('token', '');
                             history.replace(ROUTES.home)
                         }}
                         _hover={{
