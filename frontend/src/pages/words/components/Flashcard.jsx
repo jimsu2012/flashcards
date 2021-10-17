@@ -1,13 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { StarIcon } from '@chakra-ui/icons'
-import { Container, Grid, Stack, Text, GridItem, Button, Box } from '@chakra-ui/react'
-import { useHistory } from 'react-router-dom'
-import ROUTES from '../../../router/router'
 import { baseUrl } from '../../../constants/constants'
 
 export default function FlashcardComponent({id}) {
-    const history = useHistory();
-
     const url = [baseUrl, 'api', 'flashcards', id].join('/');
 
     const [error, setError] = useState(null);
@@ -22,13 +16,13 @@ export default function FlashcardComponent({id}) {
             },
             (error) => {
                 setIsLoaded(true);
-                setFlashcard(error);
+                setError(error);
             }
         )
     }, [url])
 
     if (error) {
-        return <div>Error: {error}</div>
+        return <div>Error:</div>
     } else if (!isLoaded) {
         return <div>Loading...</div>
     } else if (!flashcard) {

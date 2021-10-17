@@ -1,26 +1,46 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Formik, Form } from 'formik'
 import { Text, Input, Container, Button, InputGroup, InputLeftElement, InputRightElement, Flex, useColorModeValue, Stack, Heading, Link, Box } from '@chakra-ui/react'
 import { EmailIcon, LockIcon } from '@chakra-ui/icons'
 import WithSubnavigation from './authnavbar'
 import { useHistory } from 'react-router-dom'
 import ROUTES from '../../router/router'
+import { baseUrl } from '../../constants/constants'
 
 function FormikExample() {
+    const url = [baseUrl, 'api', 'api-token-auth'].join('/');
 
     const history = useHistory()
 
-    const [show, setShow] = React.useState(false)
+    const [error, setError] = useState(null);
+    const [show, setShow] = useState(false)
 
     const handleChangePass = () => {
         setShow(!show)
     }
 
-    const firebase = {
-        submit: values => {
-            alert(`Email is ${values.username} and password is ${values.password}`)
-            history.replace(ROUTES.view)
-        }
+    const apiSubmit = values => {
+        fetch(url, {
+            method: 'POST',
+            body: JSON.stringify({
+                username: values.username,
+                password: values.password
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(res => res.json()).then((result) => {
+            const token = result.token;
+            localStorage.setItem('token', token);
+            console.log(result);
+            if (token) {
+                history.replace(ROUTES.view)
+            } else {
+                setError('Invalid username/password combination');
+            }
+        }, (error) => {
+            setError(error);
+        })
     }
 
     return (
@@ -53,7 +73,7 @@ function FormikExample() {
 
 
                                 onSubmit={(values, actions) => {
-                                    firebase.submit(values)
+                                    apiSubmit(values)
                                     actions.setSubmitting(false)
                                 }}
                             >
@@ -139,6 +159,7 @@ function FormikExample() {
                                     </Container>
                                 )}
                             </Formik>
+                            <div style={{color: 'red'}}>{error ? <div>Error: {error}</div> : null}</div>
                         </Stack>
                     </Box>
                 </Stack>

@@ -2,8 +2,10 @@ import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { baseUrl } from '../../../constants/constants'
 import FlashcardComponent from './Flashcard'
+import FlashcardEditableComponent from './FlashcardEditableComponent'
 import "../styles/Deck.css"
 import WithSubnavigation from '../signednavbar'
+import AddFlashcardComponent from './AddFlashcard'
 
 export default function DeckComponent() {
     const { id } = useParams();
@@ -17,7 +19,6 @@ export default function DeckComponent() {
         fetch(url).then(res => res.json()).then(
             (result) => {
                 setIsLoaded(true);
-                console.log(result);
                 setDeck(result);
             },
             (error) => {
@@ -26,6 +27,27 @@ export default function DeckComponent() {
             }
         )
     }, [url]);
+
+    const isLoggedIn = () => {
+        return localStorage.getItem('token') != '';
+    }
+
+    const onAddFlashcardSubmit = (result) => {
+        setDeck({
+            ...deck,
+            flashcards: [
+                ...deck.flashcards,
+                result.id
+            ]
+        });
+    }
+    
+    const onFlashcardDelete = (flashcardId) => {
+        setDeck({
+            ...deck,
+            flashcards: deck.flashcards.filter(id => id !== flashcardId)
+        });
+    }
 
     if (error) {
         return <div>Error: {error}</div>
@@ -37,7 +59,7 @@ export default function DeckComponent() {
     return (
         <div>
             <WithSubnavigation/>
-            <div class="deck-info">
+            <div className="deck-info">
                 <b className="title">{deck.title}</b>
                 <p>Made by {deck.author_id}</p>
                 <i>{deck.description}</i>
@@ -48,7 +70,11 @@ export default function DeckComponent() {
                     <p className="deck-header-term">Term</p>
                     <p className="deck-header-definition">Definition</p>
                 </div>
-                {deck.flashcards && deck.flashcards.map(id => <FlashcardComponent id={id}/>)}
+                {deck.flashcards && deck.flashcards.map(
+                    flashcardId => isLoggedIn() ? 
+                        <FlashcardEditableComponent id={flashcardId} key={flashcardId} onDelete={onFlashcardDelete}/> :
+                        <FlashcardComponent id={flashcardId} key={flashcardId}/>)}
+                {isLoggedIn() ? <AddFlashcardComponent deckId={id} onSubmit={onAddFlashcardSubmit}/> : null}
             </ul>
         </div>
     )

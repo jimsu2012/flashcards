@@ -33,3 +33,26 @@
 .flashcard-term, .flashcard-definition {
     background: linear-gradient(30deg, #eaeaea, #f5f5f5);
 }
+
+.flashcard-delete, .flashcard-create {
+    display: block;
+    border-radius: 5px;
+    padding: 0.5em 1em;
+    margin: 1em 0.5em;
+    background: linear-gradient(30deg, #ee2435, #f43647);
+    color: white;
+}
+
+.flashcard-delete:hover {
+    background: linear-gradient(30deg, #aa2313, #aa2313);
+    cursor: pointer;
+}
+
+.flashcard-create {
+    background: linear-gradient(30deg, #13d310, #13ea10);
+}
+
+.flashcard-create:hover {
+    background: linear-gradient(30deg, #13a310, #13ba10);
+    cursor: pointer;
+}

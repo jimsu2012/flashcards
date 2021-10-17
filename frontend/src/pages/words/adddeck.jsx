@@ -1,73 +1,40 @@
-import React from 'react'
-import { Formik, Form } from 'formik'
-import { Text, Input, Container, Button } from '@chakra-ui/react'
-import WithSubnavigation from './signednavbar'
-import { addDeckAction} from '../../actions/AddDeckActions'
+import React, { useEffect, useState } from 'react'
+import { baseUrl } from '../../../constants/constants'
+import "../styles/Deck.css"
+import WithSubnavigation from '../signednavbar'
 
-function FormikExample() {
+export default function AddDeck() {
+    const url = [baseUrl, 'api', 'decks'].join('/');
 
-   
-    const firebase = {
-        submit: ({definition, term}) => {
-            addDeckAction({
-                deckId: "1",
-                term,
-                definition,
-                imageUrl: "",
-            }).then((value) => {
-                console.log(value);
-            })
-        }
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        fetch(url, {
+            method: 'POST',
+            body: JSON.stringify({
+                // TBD
+            }),
+            headers: {
+                'Authorization': 'Token ' + localStorage.getItem('token'),
+                'Content-Type': 'application/json'
+            }
+        }).then(res => res.json()).then(
+            (result) => {
+                // Switch to /deck/:id page for editing
+            },
+            (error) => {
+                setError(error);
+            }
+        )
+    }, [url]);
+
+    if (error) {
+        return <div>error</div>;
     }
-
-
     return (
         <>
         <WithSubnavigation />
-        <Formik
-            initialValues={{
-                definition: '',
-                term: ''
-            }}
-            onSubmit={(values, actions) => {
-                firebase.submit(values)
-                actions.setSubmitting(false)
-            }}
-        >
-            {props => (
-                <Container paddingTop={"15"} >
-                    <Form onSubmit={props.handleSubmit} >
-                        <Container padding="2" >
-                            <Text mb="8px" fontWeight={"semibold"}>Term: </Text>
-                            <Input
-                                name="term"
-                                value={props.values.term}
-                                onChange={props.handleChange}
-                                placeholder="Enter your card term here..."
-                                size="md"
-                                onBlur={props.handleBlur}
-                            />
-                        </Container>
-                        <Container padding="2">
-                            <Text mb="8px" fontWeight={"semibold"} >Meaning: </Text>
-                            <Input
-                                name="definition"
-                                value={props.values.definition}
-                                onChange={props.handleChange}
-                                onBlur={props.handleBlur}
-                                placeholder="Enter your card meaning here..."
-                                size="md"
-                            />
-                        </Container>
-                        <Container padding="2" >
-                            <Button colorScheme="teal" onClick={props.handleSubmit} >Submit</Button>
-                        </Container>
-                    </Form>
-                </Container>
-            )}
-        </Formik>
+        
         </>
     )
 }
-
-export default FormikExample
